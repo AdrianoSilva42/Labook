@@ -13,6 +13,7 @@ app.listen(3003, () => {
     console.log("Servidor rodando na porta 3003");
 });
 
+//singup
 app.post("/users", async(req:Request, res:Response) => {
     try{
         const {id, name, email, password, role}: UserDBPost = req.body
@@ -88,6 +89,7 @@ app.post("/users", async(req:Request, res:Response) => {
 
 });
 
+//login
 app.get("/users/:id", async(req:Request, res:Response) => {
     try{
 
@@ -96,11 +98,76 @@ app.get("/users/:id", async(req:Request, res:Response) => {
         const [result] = await db.select("*").from("users").where("id", "=", id)
 
         if(!result){
+            res.status(400)
             throw new Error("Esse usuario não existe. Tente novamente com um 'id' valido")
         };
 
         res.status(200).send(result)
     }catch (error) {
+        console.log(error)
+
+        if (res.statusCode === 200) {
+            res.status(500)
+        }
+
+        if (error instanceof Error) {
+            res.status(400).send(error.message)
+        } else {
+            res.send("Erro inesperado")
+        }
+    }
+
+});
+
+//create post
+app.post("/posts", async(req:Request, res:Response) => {
+    try{
+
+       const {id, creatorId, content} = req.body
+
+       if(!id && !creatorId && !content){
+          throw new Error("É necessario preencher todos os campos")
+       }
+       const posts = await db.select("*").from("post")
+
+       if(id !== undefined){
+            const ids = posts.map(id => {return id.id})
+
+            if(id.length < 3){
+                throw new Error("O 'id' do novo usuario deve conter 3 digitos e ser diferente do que já existe.")
+            }
+        
+        if(ids.includes(id)){
+            throw new Error("Já existe uma conta com esse 'id'. Tente novamente com outro.")
+        }
+       };
+
+       if(creatorId !== undefined){
+            const user = await db.select("*").from("users")
+            const idDB = user.map(id => {return id.id})
+
+            if(!idDB.includes(creatorId)){
+                throw new Error("Digite um 'id' existente para o 'creatorId'.")
+            }
+       };
+
+       if(content !== undefined){
+        if(content.length < 1){
+            throw new Error("A postagem precisa conter alguma coisa para ser publicada.")
+        }
+       };
+
+       const newPost = {
+        id: id,
+        creator_id: creatorId,
+        content: content
+       }
+
+       await db("post").insert(newPost)
+
+       res.status(201).send('Conteudo postado com sucesso!')
+
+    }catch(error) {
         console.log(error)
 
         if (res.statusCode === 200) {
@@ -113,5 +180,32 @@ app.get("/users/:id", async(req:Request, res:Response) => {
             res.send("Erro inesperado")
         }
     }
+});
 
-})
+//get post
+app.get("/posts/:id", async(req:Request, res:Response) => {
+    try{
+        const id = req.params.id
+
+        const [result] = await db.select("*").from("post").where("id", "=", id)
+
+        if(!result){
+            throw new Error("Esse post não foi encontrado.")
+        }
+
+        res.status(200).send(result)
+
+    }catch (error) {
+        console.log(error)
+
+        if (res.statusCode === 200) {
+            res.status(500)
+        }
+
+        if (error instanceof Error) {
+            res.status(400).send(error.message)
+        } else {
+            res.send("Erro inesperado")
+        }
+    }
+});
