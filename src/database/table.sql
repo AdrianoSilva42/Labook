@@ -14,8 +14,8 @@ CREATE TABLE post(
     id TEXT UNIQUE PRIMARY KEY NOT NULL,
     creator_id TEXT NOT NULL, --FK
     content TEXT NOT NULL,
-    likes INTEGER NOT NULL,
-    deslikes INTEGER NOT NULL,
+    likes INTEGER NOT NULL DEFAULT(0),
+    deslikes INTEGER NOT NULL DEFAULT(0),
     created_at TEXT NOT NULL DEFAULT(DATETIME('now', 'localtime')),
     update_at TEXT NOT NULL DEFAULT(DATETIME('now', 'localtime')),
 
