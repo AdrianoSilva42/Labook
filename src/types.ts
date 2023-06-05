@@ -1,16 +1,6 @@
-export enum USER_ROLES {
-    NORMAL = "NORMAL",
-    ADMIN = "ADMIN"
-}
+import { USER_ROLES } from "./models/User"
 
-export interface TokenPayload {
-    id: string,
-    name: string,
-    role: USER_ROLES
-}
-
-//recebendo dados do body para criar um novo Usuario
-export interface UserDBPost{
+export interface UserClass{
     id: string,
     name: string,
     email: string, 
@@ -18,10 +8,27 @@ export interface UserDBPost{
     role: string
 }
 
-export interface UserDBGet{
+export interface UserDB{
     id: string,
     name: string,
     email: string, 
     password: string, 
-    role: string
+    role: USER_ROLES,
+    created_at: string
+}
+
+export interface CreatedPost{
+    id: string | undefined,
+    creatorId: string | undefined,
+    content: string | undefined
+}
+
+export interface PostDB{
+    id: string,
+    creator_id: string,
+    content: string,
+    likes: number,
+    dislikes: number,
+    created_at: string,
+    update_at: string
 }

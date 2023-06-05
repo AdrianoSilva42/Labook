@@ -15,19 +15,26 @@ CREATE TABLE post(
     creator_id TEXT NOT NULL, --FK
     content TEXT NOT NULL,
     likes INTEGER NOT NULL DEFAULT(0),
-    deslikes INTEGER NOT NULL DEFAULT(0),
+    dislikes INTEGER NOT NULL DEFAULT(0),
     created_at TEXT NOT NULL DEFAULT(DATETIME('now', 'localtime')),
-    update_at TEXT NOT NULL DEFAULT(DATETIME('now', 'localtime')),
+    update_at TEXT,
 
     FOREIGN KEY(creator_id) REFERENCES users(id)
 );
 
 
-CREATE TABLE likes_deslikes(
+CREATE TABLE likes_dislikes(
     user_id TEXT NOT NULL,
     post_id TEXT NOT NULL,
     like INTEGER NOT NULL,
 
-    FOREIGN KEY(user_id) REFERENCES users(id),
+    FOREIGN KEY(user_id) REFERENCES users(id)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+
     FOREIGN KEY(post_id) REFERENCES post(id)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
 );
+
+
