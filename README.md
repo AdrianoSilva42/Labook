@@ -49,7 +49,7 @@ Representa a relação de usuario e os likes e dislikes nas postagens. Todo like
 
 |id(TEXT)|creator_id(TEXT)|content(TEXT)| like(REAL) | dislike(REAL)| created_at(TEXT) | update_at(TEXT)|
 |:-------|:---------|:------------|:-----------------------|:---------------------------|:------ | :------ |
-|   **a aplicação ira gerar** |**id do usuario**|`ola pessoas !!`| 0 | 1 |**gerado pela aplic ação**| **gerado pela aplicação**|
+|   **a aplicação ira gerar** |**id do usuario**|`ola pessoas !!`| 1 | 0 |**gerado pela aplicação**| **gerado pela aplicação**|
 
 
 
